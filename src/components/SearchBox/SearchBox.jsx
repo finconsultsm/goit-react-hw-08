@@ -1,6 +1,6 @@
 import sc from "./SearchBox.module.css";
 import { useDispatch, useSelector } from "react-redux";
-import { changeQueryFilter } from "../../redux/filtersSlice";
+import { changeQueryFilter } from "../../redux/filters/slice";
 
 const SearchBox = () => {
   const query = useSelector((state) => state.filter.query);

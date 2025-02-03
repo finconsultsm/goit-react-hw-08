@@ -2,7 +2,7 @@ import { FaPhoneAlt, FaUser } from "react-icons/fa";
 import sc from "./Contact.module.css";
 
 const Contact = ({ contact, handleRemoveContact }) => {
-  const { name, phone } = contact;
+  const { name, number } = contact;
   console.log(contact);
 
   return (
@@ -14,7 +14,7 @@ const Contact = ({ contact, handleRemoveContact }) => {
         </div>
         <div>
           <FaPhoneAlt />
-          {phone}
+          {number}
         </div>
       </div>
       <button onClick={() => handleRemoveContact(contact.id)}>Delete</button>
