@@ -9,16 +9,25 @@ import {
 } from "@mui/material";
 import { useNavigate } from "react-router-dom";
 import { useSelector } from "react-redux";
+import { getIsLoggedIn } from "../../../redux/auth/selectors";
+import { useDispatch } from "react-redux";
+import { logOut } from "../../../redux/auth/operations";
 import { getUser } from "../../../redux/auth/selectors";
 
-
-export const AuthNav = ({
+export const UserMenu = ({
   anchorElUser,
   handleCloseUserMenu,
   handleOpenUserMenu,
 }) => {
   const navigate = useNavigate();
+  const dispatch = useDispatch();
   const user = useSelector(getUser);
+
+  const handleLogout = () => {
+    dispatch(logOut());
+    navigate("/login");
+    handleCloseUserMenu();
+  };
 
   return (
     <Box sx={{ flexGrow: 0 }}>
@@ -43,11 +52,21 @@ export const AuthNav = ({
         open={Boolean(anchorElUser)}
         onClose={handleCloseUserMenu}
       >
-        <MenuItem onClick={() => navigate("/login")}>
-          <Typography>Login</Typography>
-        </MenuItem>
-        <MenuItem onClick={() => navigate("/register")}>
-          <Typography>Register</Typography>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "flex-start",
+            p: 2,
+          }}
+        >
+          <Typography textAlign="center">{user.name}</Typography>
+          <Typography textAlign="center" variant="body2" color="textSecondary">
+            {user.email}
+          </Typography>
+        </Box>
+        <MenuItem onClick={handleLogout}>
+          <Typography>Logout</Typography>
         </MenuItem>
       </Menu>
     </Box>

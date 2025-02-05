@@ -3,9 +3,12 @@ import axios from "axios";
 
 const baseUrl = "https://connections-api.goit.global";
 
-const setToken = (state) => {
-  const token = state.auth.token;
+const setAuthHeader = (token) => {
   axios.defaults.headers.common.Authorization = `Bearer ${token}`;
+};
+
+const clearAuthHeader = () => {
+  axios.defaults.headers.common.Authorization = "";
 };
 
 export const register = createAsyncThunk(
@@ -13,6 +16,7 @@ export const register = createAsyncThunk(
   async (userSignUp, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${baseUrl}/users/signup`, userSignUp);
+      setAuthHeader(response.data.token);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -25,6 +29,7 @@ export const login = createAsyncThunk(
   async (userLogin, { rejectWithValue }) => {
     try {
       const response = await axios.post(`${baseUrl}/users/login`, userLogin);
+      setAuthHeader(response.data.token);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -32,17 +37,11 @@ export const login = createAsyncThunk(
   }
 );
 
-export const logout = createAsyncThunk(
+export const logOut = createAsyncThunk(
   "auth/logout",
   async (_, { getState, rejectWithValue }) => {
     try {
-      const state = getState();
-      const token = state.auth.token;
-      const response = await axios.post(`${baseUrl}/users/logout`, null, {
-        headers: {
-          Authorization: `Bearer ${token}`,
-        },
-      });
+      const response = await axios.post(`${baseUrl}/users/logout`, null);
       return response.data;
     } catch (error) {
       return rejectWithValue(error.response.data);
@@ -54,7 +53,8 @@ export const refreshUser = createAsyncThunk(
   "auth/refreshUser",
   async (_, { getState, rejectWithValue }) => {
     try {
-      setToken(getState());
+      const token = getState().auth.token;
+      setAuthHeader(token);
       const response = await axios.get(`${baseUrl}/users/current`);
       return response.data;
     } catch (error) {

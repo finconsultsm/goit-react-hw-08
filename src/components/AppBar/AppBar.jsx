@@ -3,16 +3,14 @@ import AB from "@mui/material/AppBar";
 import Box from "@mui/material/Box";
 import Toolbar from "@mui/material/Toolbar";
 import IconButton from "@mui/material/IconButton";
-import Typography from "@mui/material/Typography";
-import Menu from "@mui/material/Menu";
 import MenuIcon from "@mui/icons-material/Menu";
 import Container from "@mui/material/Container";
-import Avatar from "@mui/material/Avatar";
-import Tooltip from "@mui/material/Tooltip";
-import MenuItem from "@mui/material/MenuItem";
 import { Navigation } from "./Navigation/Navigation";
 import { useNavigate } from "react-router-dom";
 import { AuthNav } from "./AuthNav/AuthNav";
+import { UserMenu } from "./UserMenu/UserMenu";
+import { useSelector } from "react-redux";
+import { getIsLoggedIn } from "../../redux/auth/selectors";
 
 const pages = [
   {
@@ -30,6 +28,7 @@ function AppBar() {
   const [anchorElNav, setAnchorElNav] = React.useState(null);
   const [anchorElUser, setAnchorElUser] = React.useState(null);
   const navigate = useNavigate();
+  const isLoggedIn = useSelector(getIsLoggedIn);
 
   const handleOpenNavMenu = (event) => {
     setAnchorElNav(event.currentTarget);
@@ -76,11 +75,19 @@ function AppBar() {
           </Box>
           <Navigation pages={pages} handleClickNavMenu={handleClickNavMenu} />
 
-          <AuthNav
-            anchorElUser={anchorElUser}
-            handleCloseUserMenu={handleCloseUserMenu}
-            handleOpenUserMenu={handleOpenUserMenu}
-          />
+          {isLoggedIn ? (
+            <UserMenu
+              anchorElUser={anchorElUser}
+              handleCloseUserMenu={handleCloseUserMenu}
+              handleOpenUserMenu={handleOpenUserMenu}
+            />
+          ) : (
+            <AuthNav
+              anchorElUser={anchorElUser}
+              handleCloseUserMenu={handleCloseUserMenu}
+              handleOpenUserMenu={handleOpenUserMenu}
+            />
+          )}
         </Toolbar>
       </Container>
     </AB>
