@@ -50,7 +50,6 @@ const authSlice = createSlice({
       .addCase(logOut.fulfilled, (state) => {
         state.user = initialState.user;
         state.token = initialState.token;
-        state.contacts = [];
         state.isLoggedIn = false;
       });
   },
