@@ -3,7 +3,6 @@ import sc from "./Contact.module.css";
 
 const Contact = ({ contact, handleRemoveContact }) => {
   const { name, number } = contact;
-  console.log(contact);
 
   return (
     <li className={sc.contact}>
